@@ -117,7 +117,7 @@ export default function DossierTabs({
               </Menu>
             )}
 
-            <Segment piled style={{ height: '95vh' }}>
+            <Segment>
               {selectedFile && selectedFile.exists && (
                 <div style={{ flex: '1 1 auto', height: '90vh' }}>
                   {' '}
