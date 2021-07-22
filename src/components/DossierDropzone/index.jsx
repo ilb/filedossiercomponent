@@ -8,7 +8,7 @@ const DossierDropzone = ({ dossierFiles, external, actionsState, dossierActions,
   const selectedFile = dossierFiles[0];
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: 'application/pdf',
+    accept: selectedFile.allowedMediaTypes,
     onDrop: async (acceptedFiles) => {
       setFiles(
         acceptedFiles.map((file) =>
