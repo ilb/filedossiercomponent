@@ -91,7 +91,7 @@ export default function DossierComponent(props) {
   let dossierFiles = (dossier && dossier.dossierFile) || [];
   if (filesFilter) {
     if (typeof filesFilter === 'function') {
-      dossierFiles = dossierFiles.filter(filesFilter);
+      dossierFiles = filesFilter(dossierFiles);
     } else if (typeof filesFilter === 'string') {
       dossierFiles = dossierFiles.filter((file) => file.code === filesFilter);
     } else if (Array.isArray(filesFilter)) {
