@@ -89,6 +89,13 @@ export default function DossierComponent(props) {
 
   // filter dossie files that will be showed
   let dossierFiles = (dossier && dossier.dossierFile) || [];
+  if (sort) {
+    if (typeof sort === 'function') {
+      dossierFiles = dossierFiles.sort(sort);
+    } else {
+      throw new Error('Invalid {sort} type');
+    }
+  };
   if (filesFilter) {
     if (typeof filesFilter === 'function') {
       dossierFiles = dossierFiles.filter(filesFilter);
@@ -99,12 +106,6 @@ export default function DossierComponent(props) {
       dossierFiles = dossierFiles.filter((file) => filesFilter.indexOf(file.code) !== -1);
     } else {
       throw new Error('Invalid {filesFilter} type');
-    }
-  } else if(sort) {
-    if (typeof sort === 'function') {
-      dossierFiles = sort(dossierFiles);
-    } else {
-      throw new Error('Invalid {sort} type');
     }
   } else {
     dossierFiles = dossierFiles.filter((file) => !file.hidden); // default don't show hidden files
@@ -139,9 +140,8 @@ export default function DossierComponent(props) {
           <Message
             error
             visible
-            header={`Ошибка при выполнении действия с досье${
-              actionsState.description ? `: ${actionsState.description}` : ''
-            }`}
+            header={`Ошибка при выполнении действия с досье${actionsState.description ? `: ${actionsState.description}` : ''
+              }`}
             content={actionsState.error}
           />
         )}
