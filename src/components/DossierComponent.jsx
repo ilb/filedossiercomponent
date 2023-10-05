@@ -101,7 +101,11 @@ export default function DossierComponent(props) {
       throw new Error('Invalid {filesFilter} type');
     }
   } else if(sort) {
-    dossierFiles = sort(dossierFiles);
+    if (typeof sort === 'function') {
+      dossierFiles = sort(dossierFiles);
+    } else {
+      throw new Error('Invalid {sort} type');
+    }
   } else {
     dossierFiles = dossierFiles.filter((file) => !file.hidden); // default don't show hidden files
   }
