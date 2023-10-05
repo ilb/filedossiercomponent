@@ -63,7 +63,7 @@ export default function DossierComponent(props) {
     }
   }, [...Object.values(dossierParams)]);
 
-  const { header, mode, filesFilter, readOnly, height = '100%' } = props;
+  const { header, mode, filesFilter, sort, readOnly, height = '100%' } = props;
   const { dossier, error, loading, external } = dossierData;
 
   let FilesComponent;
@@ -91,7 +91,7 @@ export default function DossierComponent(props) {
   let dossierFiles = (dossier && dossier.dossierFile) || [];
   if (filesFilter) {
     if (typeof filesFilter === 'function') {
-      dossierFiles = filesFilter(dossierFiles);
+      dossierFiles = dossierFiles.filter(filesFilter);
     } else if (typeof filesFilter === 'string') {
       dossierFiles = dossierFiles.filter((file) => file.code === filesFilter);
     } else if (Array.isArray(filesFilter)) {
@@ -100,6 +100,8 @@ export default function DossierComponent(props) {
     } else {
       throw new Error('Invalid {filesFilter} type');
     }
+  } else if(sort) {
+    dossierFiles = sort(dossierFiles);
   } else {
     dossierFiles = dossierFiles.filter((file) => !file.hidden); // default don't show hidden files
   }
