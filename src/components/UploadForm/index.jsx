@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Dropdown, Radio, Input } from 'semantic-ui-react';
+import { Button, Dropdown, Radio, Input, Grid } from 'semantic-ui-react';
 import PrivAPI from './PrivAPI';
 
 const makeRainbow = (text) => {
@@ -89,51 +89,52 @@ export default function UploadForm({ file, actionsState, dossierActions, uploadC
   };
 
   return (
-    <div className="file-dossier-upload-form">
-      <Button
-        type="button"
-        basic
-        attached="left"
-        content="БыстроСкан"
-        onClick={scanStart}
-        disabled={loading}
-      />
-      <Dropdown simple basic icon="setting" open={false} className="right attached button icon">
-        <Dropdown.Menu className="file-dossier-bystroscan-params" style={{ padding: '0.5rem' }}>
-          <div>
-            <Radio
-              name="scanColor"
-              value="color"
-              label={makeRainbow('цветное')}
-              checked={scanColor === 'color'}
-              onChange={changeField}
-              style={{ marginRight: '0.5rem' }}
-            />
-            <Radio
-              name="scanColor"
-              value="bw"
-              label="ч/б"
-              checked={scanColor === 'bw'}
-              onChange={changeField}
-            />
-          </div>
-          <div>
-            <label>Разрешение</label>
-            <Input
-              title="Разрешение"
-              type="text"
-              name="scanDpi"
-              maxLength="3"
-              size="mini"
-              value={scanDpi}
-              onChange={changeField}
-              style={{ width: '3rem', margin: '0 0.25rem', textAlign: 'center' }}
-            />
-            <label>dpi</label>
-          </div>
-        </Dropdown.Menu>
-      </Dropdown>
-
+    <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
+      <div>
+        <Button
+          type="button"
+          basic
+          attached="left"
+          content="БыстроСкан"
+          onClick={scanStart}
+          disabled={loading}
+        />
+        <Dropdown simple basic icon="setting" open={false} className="right attached button icon">
+          <Dropdown.Menu className="file-dossier-bystroscan-params" style={{ padding: '0.5rem' }}>
+            <div>
+              <Radio
+                name="scanColor"
+                value="color"
+                label={makeRainbow('цветное')}
+                checked={scanColor === 'color'}
+                onChange={changeField}
+                style={{ marginRight: '0.5rem' }}
+              />
+              <Radio
+                name="scanColor"
+                value="bw"
+                label="ч/б"
+                checked={scanColor === 'bw'}
+                onChange={changeField}
+              />
+            </div>
+            <div>
+              <label>Разрешение</label>
+              <Input
+                title="Разрешение"
+                type="text"
+                name="scanDpi"
+                maxLength="3"
+                size="mini"
+                value={scanDpi}
+                onChange={changeField}
+                style={{ width: '3rem', margin: '0 0.25rem', textAlign: 'center' }}
+              />
+              <label>dpi</label>
+            </div>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
       <Button
         as="div"
         basic
@@ -171,30 +172,31 @@ export default function UploadForm({ file, actionsState, dossierActions, uploadC
           }}
         />
       </Button>
-
-      <Button
-        type="button"
-        color="green"
-        attached="left"
-        content="Загрузить"
-        onClick={uploadFile}
-        loading={loading}
-        disabled={loading}
-      />
-      <Dropdown
-        text=" "
-        // className="right attached button green icon"
-        className="right attached button green icon file-dossier-upload-mode-selection"
-        icon={`${uploadMode === 'merge' ? 'copy' : 'file'} outline`}
-        onChange={(e, { value }) => {
-          setState({ uploadMode: value });
-        }}
-        value={uploadMode}
-        options={[
-          { key: 'new', text: 'Загрузить новый файл', value: 'new', icon: 'file outline' },
-          { key: 'merge', text: 'Объединить файлы', value: 'merge', icon: 'copy outline' }
-        ]}
-      />
+      <div>
+        <Button
+          type="button"
+          color="green"
+          attached="left"
+          content="Загрузить"
+          onClick={uploadFile}
+          loading={loading}
+          disabled={loading}
+        />
+        <Dropdown
+          text=" "
+          // className="right attached button green icon"
+          className="right attached button green icon file-dossier-upload-mode-selection"
+          icon={`${uploadMode === 'merge' ? 'copy' : 'file'} outline`}
+          onChange={(e, { value }) => {
+            setState({ uploadMode: value });
+          }}
+          value={uploadMode}
+          options={[
+            { key: 'new', text: 'Загрузить новый файл', value: 'new', icon: 'file outline' },
+            { key: 'merge', text: 'Объединить файлы', value: 'merge', icon: 'copy outline' }
+          ]}
+        />
+      </div>
     </div>
   );
 }

@@ -195,7 +195,6 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
     const newWidth = img.naturalWidth * newScaleNum;
     const newHeight = img.naturalHeight * newScaleNum;
 
-
     img.style.width = `${newWidth}px`;
     img.style.minWidth = `${newWidth}px`;
     img.style.maxWidth = `${newWidth}px`;
@@ -266,7 +265,7 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
   const { currentPage, pageText, scaleValue, scaleNum, rotateLoading } = state;
   return (
     <React.Fragment>
-      <Sticky>
+      <Sticky offset={15}>
         <ControlsMenu
           attached="top"
           file={file}
