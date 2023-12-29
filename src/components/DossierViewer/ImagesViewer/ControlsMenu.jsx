@@ -21,7 +21,14 @@ export const getZoomOutScale = (scaleNum) => {
   return newScale;
 };
 
-export const calcScaleNum = ({ scale, currentScaleNum, rotate, containerSizes, elementSizes, numPages }) => {
+export const calcScaleNum = ({
+  scale,
+  currentScaleNum,
+  rotate,
+  containerSizes,
+  elementSizes,
+  numPages
+}) => {
   let scaleNum = scale;
   if (scale === 'pageActualOption') {
     scaleNum = 1.0;
@@ -69,10 +76,10 @@ function ControlsMenu({
 }) {
   return (
     <>
-      <div className="file-dossier-file-name" title={file.name}>
+      <div className="file-dossier-file-name" style={{ backgroundColor: '#fff' }} title={file.name}>
         <span>{file.name}</span>
       </div>
-      <Menu inverted className="file-dossier-file-controls" fluid="true">
+      <Menu style={{ marginTop: '0' }} inverted className="file-dossier-file-controls" fluid="true">
         {numPages && numPages > 1 && currentPage && (
           <Menu.Menu position="left">
             <Menu.Item
