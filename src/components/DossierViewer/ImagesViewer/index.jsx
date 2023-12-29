@@ -265,7 +265,7 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
   const { currentPage, pageText, scaleValue, scaleNum, rotateLoading } = state;
   return (
     <React.Fragment>
-      <Sticky offset={15}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
         <ControlsMenu
           attached="top"
           file={file}
@@ -280,7 +280,7 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
           rotateFile={rotateFile}
           rotateLoading={rotateLoading}
         />
-      </Sticky>
+      </div>
       <div attached="bottom" className="file-dossier-img-container" ref={contentRef}>
         {images.map((image, i) => (
           <div key={image.name}>

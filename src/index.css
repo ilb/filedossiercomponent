@@ -75,6 +75,10 @@
   border-bottom: 1px solid rgba(34, 36, 38, 0.15) !important;
 }
 
+.file-dossier-file-name {
+background-color: #fff;
+}
+
 .file-dossier-dossier-info>.icon {
   margin: 0 !important;
 }
