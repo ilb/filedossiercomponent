@@ -89,7 +89,7 @@ export default function UploadForm({ file, actionsState, dossierActions, uploadC
   };
 
   return (
-    <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
+    <div style={{ display: 'flex', flexFlow: 'row wrap', padding: '0 1px' }}>
       <div>
         <Button
           type="button"
