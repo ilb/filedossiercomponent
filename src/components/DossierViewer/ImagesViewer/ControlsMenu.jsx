@@ -75,132 +75,127 @@ function ControlsMenu({
   rotateLoading
 }) {
   return (
-    <>
-      <div className="file-dossier-file-name" style={{ backgroundColor: '#fff' }} title={file.name}>
-        <span>{file.name}</span>
-      </div>
-      <Menu style={{ marginTop: '0' }} inverted className="file-dossier-file-controls" fluid="true">
-        {numPages && numPages > 1 && currentPage && (
-          <Menu.Menu position="left">
-            <Menu.Item
-              link
-              icon="triangle left"
-              value={currentPage - 1}
-              onClick={setPage}
-              disabled={currentPage <= 1}
-            />
-            <Menu.Item
-              link
-              icon="triangle right"
-              value={currentPage + 1}
-              onClick={setPage}
-              disabled={currentPage >= numPages}
-            />
-            <Menu.Item>
-              <Input
-                name="pageText"
-                value={pageText || ''}
-                style={{ width: '3rem' }}
-                onChange={(e, { value }) => {
-                  setPageText((value || '').replace(/\D/g, ''));
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.select();
-                }}
-                onBlur={() => {
-                  if (pageText != currentPage) {
-                    setPageText(currentPage);
-                  }
-                }} // eslint-disable-line eqeqeq
-                onKeyDown={(e) => {
-                  if (e.keyCode === 13 && pageText && Number(pageText)) {
-                    setPage(null, { value: pageText });
-                  }
-                }}
-              />
-              <span className="file-dossier-page-count-label">&nbsp;из {numPages}</span>
-            </Menu.Item>
-          </Menu.Menu>
-        )}
-
-        {scaleNum && (
-          <Menu.Menu style={{ display: 'flex', margin: 'auto' }}>
-            <Menu.Item
-              link
-              icon="minus"
-              onClick={() => {
-                setScale(getZoomOutScale(scaleNum));
+    <Menu style={{ marginTop: '0' }} inverted className="file-dossier-file-controls" fluid="true">
+      {numPages && numPages > 1 && currentPage && (
+        <Menu.Menu position="left">
+          <Menu.Item
+            link
+            icon="triangle left"
+            value={currentPage - 1}
+            onClick={setPage}
+            disabled={currentPage <= 1}
+          />
+          <Menu.Item
+            link
+            icon="triangle right"
+            value={currentPage + 1}
+            onClick={setPage}
+            disabled={currentPage >= numPages}
+          />
+          <Menu.Item>
+            <Input
+              name="pageText"
+              value={pageText || ''}
+              style={{ width: '3rem' }}
+              onChange={(e, { value }) => {
+                setPageText((value || '').replace(/\D/g, ''));
               }}
-              disabled={scaleNum <= MIN_SCALE}
-            />
-            <Menu.Item
-              link
-              icon="plus"
-              onClick={() => {
-                setScale(getZoomInScale(scaleNum));
+              onFocus={(e) => {
+                e.currentTarget.select();
               }}
-              disabled={scaleNum >= MAX_SCALE}
+              onBlur={() => {
+                if (pageText != currentPage) {
+                  setPageText(currentPage);
+                }
+              }} // eslint-disable-line eqeqeq
+              onKeyDown={(e) => {
+                if (e.keyCode === 13 && pageText && Number(pageText)) {
+                  setPage(null, { value: pageText });
+                }
+              }}
             />
-            <Menu.Item className="file-dossier-no-padding">
-              <Dropdown
-                item
-                className="file-dossier-scale-selection"
-                value={scaleValue || 'pageWidthOption'}
-                text={scaleNum ? `${Math.round(scaleNum * 100)}%` : ''}
-                onChange={(e, { value }) => {
-                  setScale(value);
-                }}
-                options={[
-                  { key: 'pageActualOption', value: 'pageActualOption', text: 'Реальный размер' },
-                  { key: 'pageWidthOption', value: 'pageWidthOption', text: 'По ширине страницы' },
-                  { key: 'pageFitOption', value: 'pageFitOption', text: 'По размеру страницы' },
-                  { key: '0.5', value: 0.5, text: '50%' },
-                  { key: '0.75', value: 0.75, text: '75%' },
-                  { key: '1', value: 1, text: '100%' },
-                  { key: '1.25', value: 1.25, text: '125%' },
-                  { key: '1.5', value: 1.5, text: '150%' },
-                  { key: '2', value: 2, text: '200%' },
-                  { key: '3', value: 3, text: '300%' },
-                  { key: '4', value: 4, text: '400%' }
-                ]}
-                selectOnNavigation={false}
-                selectOnBlur={false}
-              />
-            </Menu.Item>
-          </Menu.Menu>
-        )}
-
-        <Menu.Menu position="right">
-          {scaleNum && (
-            <Menu.Item
-              link
-              icon="undo"
-              page={currentPage}
-              angle={-90}
-              onClick={rotateFile}
-              disabled={!!rotateLoading}
-            />
-          )}
-          {scaleNum && (
-            <Menu.Item
-              link
-              icon="redo"
-              page={currentPage}
-              angle={90}
-              onClick={rotateFile}
-              disabled={!!rotateLoading}
-              className="file-dossier-mirror-horizontal"
-            />
-          )}
-
-          <Dropdown item icon="content" className="file-dossier-dossier-info">
-            <Dropdown.Menu>
-              <DossierInfo file={file} />
-            </Dropdown.Menu>
-          </Dropdown>
+            <span className="file-dossier-page-count-label">&nbsp;из {numPages}</span>
+          </Menu.Item>
         </Menu.Menu>
-      </Menu>
-    </>
+      )}
+
+      {scaleNum && (
+        <Menu.Menu style={{ display: 'flex', margin: 'auto' }}>
+          <Menu.Item
+            link
+            icon="minus"
+            onClick={() => {
+              setScale(getZoomOutScale(scaleNum));
+            }}
+            disabled={scaleNum <= MIN_SCALE}
+          />
+          <Menu.Item
+            link
+            icon="plus"
+            onClick={() => {
+              setScale(getZoomInScale(scaleNum));
+            }}
+            disabled={scaleNum >= MAX_SCALE}
+          />
+          <Menu.Item className="file-dossier-no-padding">
+            <Dropdown
+              item
+              className="file-dossier-scale-selection"
+              value={scaleValue || 'pageWidthOption'}
+              text={scaleNum ? `${Math.round(scaleNum * 100)}%` : ''}
+              onChange={(e, { value }) => {
+                setScale(value);
+              }}
+              options={[
+                { key: 'pageActualOption', value: 'pageActualOption', text: 'Реальный размер' },
+                { key: 'pageWidthOption', value: 'pageWidthOption', text: 'По ширине страницы' },
+                { key: 'pageFitOption', value: 'pageFitOption', text: 'По размеру страницы' },
+                { key: '0.5', value: 0.5, text: '50%' },
+                { key: '0.75', value: 0.75, text: '75%' },
+                { key: '1', value: 1, text: '100%' },
+                { key: '1.25', value: 1.25, text: '125%' },
+                { key: '1.5', value: 1.5, text: '150%' },
+                { key: '2', value: 2, text: '200%' },
+                { key: '3', value: 3, text: '300%' },
+                { key: '4', value: 4, text: '400%' }
+              ]}
+              selectOnNavigation={false}
+              selectOnBlur={false}
+            />
+          </Menu.Item>
+        </Menu.Menu>
+      )}
+
+      <Menu.Menu position="right">
+        {scaleNum && (
+          <Menu.Item
+            link
+            icon="undo"
+            page={currentPage}
+            angle={-90}
+            onClick={rotateFile}
+            disabled={!!rotateLoading}
+          />
+        )}
+        {scaleNum && (
+          <Menu.Item
+            link
+            icon="redo"
+            page={currentPage}
+            angle={90}
+            onClick={rotateFile}
+            disabled={!!rotateLoading}
+            className="file-dossier-mirror-horizontal"
+          />
+        )}
+
+        <Dropdown item icon="content" className="file-dossier-dossier-info">
+          <Dropdown.Menu>
+            <DossierInfo file={file} />
+          </Dropdown.Menu>
+        </Dropdown>
+      </Menu.Menu>
+    </Menu>
   );
 }
 
