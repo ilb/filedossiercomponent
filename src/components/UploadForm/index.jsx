@@ -100,7 +100,9 @@ export default function UploadForm({ file, actionsState, dossierActions, uploadC
           disabled={loading}
         />
         <Dropdown simple basic icon="setting" open={false} className="right attached button icon">
-          <Dropdown.Menu className="file-dossier-bystroscan-params" style={{ padding: '0.5rem' }}>
+          <Dropdown.Menu
+            className="file-dossier-bystroscan-params"
+            style={{ zIndex: 1001, padding: '0.5rem' }}>
             <div>
               <Radio
                 name="scanColor"
