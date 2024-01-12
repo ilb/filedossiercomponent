@@ -28,7 +28,7 @@ export default function DossierViewer({
           <Select
             compact
             fluid
-            style={{ marginBottom: '0.5rem' }}
+            style={{ zIndex: 1010, marginBottom: '0.5rem' }}
             value={selectedFileCode}
             text={selectedFile.name}
             onChange={(event, { value }) => {
