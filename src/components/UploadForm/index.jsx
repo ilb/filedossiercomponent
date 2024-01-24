@@ -194,6 +194,7 @@ export default function UploadForm({ file, actionsState, dossierActions, uploadC
             setState({ uploadMode: value });
           }}
           value={uploadMode}
+          direction="left"
           options={[
             { key: 'new', text: 'Загрузить новый файл', value: 'new', icon: 'file outline' },
             { key: 'merge', text: 'Объединить файлы', value: 'merge', icon: 'copy outline' }
