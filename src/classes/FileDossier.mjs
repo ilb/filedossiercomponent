@@ -1,7 +1,10 @@
 import FormData from 'form-data';
 import fetch from 'cross-fetch';
+import createDebug from 'debug';
 
 import { parseResponseTry, getContentType } from '../utils/response';
+
+const debug = createDebug('filedossiercomponent');
 
 export default class FileDossier {
   fetchOptions = {};
@@ -27,11 +30,11 @@ export default class FileDossier {
   // @TODO: remove hostnames from filedossier API
   replaceBasePath = (url) => {
     const parsed = new URL(url);
-    console.log({ parsed });
+    debug('parsed url', { parsed });
     const result = `${this.basePath}/dossiers/${parsed.pathname.split('dossiers/')[1]}${
       parsed.search
     }`;
-    console.log('replaceBasePath', url, result);
+    debug('replaceBasePath', url, result);
     return result;
   };
 
