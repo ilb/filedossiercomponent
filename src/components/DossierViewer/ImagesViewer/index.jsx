@@ -202,7 +202,7 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
     img.style.minHeight = `${newHeight}px`;
     img.style.transform = `rotate(${rotate}deg`;
     img.style.border = '1px';
-    imgContainer.style.overflow = 'hidden';
+    imgContainer.style.overflow = 'auto';
 
     if (container) {
       if (rotate % 180 !== 0) {
@@ -281,7 +281,7 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
           rotateLoading={rotateLoading}
         />
       </div>
-      <div attached="bottom" className="file-dossier-img-container" ref={contentRef}>
+      <div attached="bottom" className="file-dossier-img-container" ref={contentRef} style={{height: 'calc(100% - 28px)'}}>
         {images.map((image, i) => (
           <div key={image.name}>
             <img
