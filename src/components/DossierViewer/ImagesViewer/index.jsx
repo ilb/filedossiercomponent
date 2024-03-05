@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ControlsMenu, { getZoomOutScale, getZoomInScale, calcScaleNum } from './ControlsMenu';
-import { Sticky } from 'semantic-ui-react';
+import { useDebouncedCallback } from "use-debounce";
 
 export default function ImagesViewer({ file, images, dossierInst, contentRef }) {
   const initialState = {
@@ -28,19 +28,19 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
   /* mounted */
   useEffect(() => {
     const imgContainer = contentRef.current;
-    imgContainer.removeEventListener('scroll', scrollUpdated, true);
+    window.removeEventListener('scroll', scrollUpdated, true);
     imgContainer.removeEventListener('DOMMouseScroll', onMouseScrollHandler, false);
 
-    imgContainer.addEventListener('scroll', scrollUpdated, true);
+    window.addEventListener('scroll', scrollUpdated, true);
     imgContainer.onmousedown = dragToScroll;
     imgContainer.addEventListener('DOMMouseScroll', onMouseScrollHandler, false);
     imgContainer.onmousewheel = onMouseScrollHandler;
 
     return function cleanup() {
-      imgContainer.removeEventListener('scroll', scrollUpdated, true);
+      window.removeEventListener('scroll', scrollUpdated, true);
       imgContainer.removeEventListener('DOMMouseScroll', onMouseScrollHandler, false);
     };
-  }, []);
+  });
 
   /* file changed */
   useEffect(() => {
@@ -68,57 +68,60 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
     }
   };
 
-  /* on scroll handler */
-  const scrollUpdated = (event) => {
-    const imgContainer = event.currentTarget;
+  const scrollUpdated = useDebouncedCallback(() => {
+    const imgContainer = contentRef.current;
     const viewTop = imgContainer.scrollTop;
-    const viewBottom = viewTop + imgContainer.clientHeight;
+    const viewBottom = viewTop + window.innerHeight;
 
     // find visible pages (images)
     const imgs = imgContainer.querySelectorAll('img');
     const visiblePages = [];
-    let lastEdge = -1;
-    for (let i = 0; i < imgs.length; i++) {
-      const img = imgs[i];
-      const imgTop = img.offsetTop + img.clientTop; // currentHeight
-      const imgHeight = img.clientHeight; // viewHeight
-      const imgBottom = imgTop + imgHeight; // viewBottom
 
-      if (lastEdge === -1) {
-        if (imgBottom >= viewBottom) {
-          lastEdge = imgBottom;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.intersectionRatio > 0) {
+          const imgHeight = entry.target.clientHeight;
+          const visibleHeight = Math.min(entry.boundingClientRect.bottom, viewBottom) - Math.max(entry.boundingClientRect.top, viewTop);
+          const percent = ((visibleHeight * 100) / imgHeight) | 0;
+
+          visiblePages.push({
+            pageNum: i + 1,
+            percent
+          });
+
+          if (!visiblePages.length) {
+            return;
+          }
+          // calc current page num
+          let newPageNum = visiblePages[0].pageNum;
+          if (visiblePages[1] && visiblePages[1].percent > visiblePages[0].percent) {
+            newPageNum++;
+          }
+
+          const { currentPage } = stateRef.current;
+          if (newPageNum !== currentPage) {
+            setState({ currentPage: newPageNum, pageText: newPageNum }); // page changed
+          }
+
+          if (visiblePages.length > 1) {
+            // find the image with the largest visible percentage
+            const maxVisibleImg = visiblePages.reduce((a, b) => a.percent > b.percent ? a : b);
+            const newPageNum = maxVisibleImg.pageNum;
+
+            const { currentPage } = stateRef.current;
+            if (newPageNum !== currentPage) {
+              setState({ currentPage: newPageNum, pageText: newPageNum }); // page changed
+            }
+          }
         }
-      } else if (imgTop > lastEdge) {
-        break;
-      }
-
-      if (imgBottom <= viewTop || imgTop >= viewBottom) {
-        continue;
-      }
-
-      const hiddenHeight = Math.max(0, viewTop - imgTop) + Math.max(0, imgBottom - viewBottom);
-      const percent = (((imgHeight - hiddenHeight) * 100) / imgHeight) | 0;
-
-      visiblePages.push({
-        pageNum: i + 1,
-        percent
       });
-    }
+    });
 
-    if (!visiblePages.length) {
-      return;
-    }
-    // calc current page num
-    let newPageNum = visiblePages[0].pageNum;
-    if (visiblePages[1] && visiblePages[1].percent > visiblePages[0].percent) {
-      newPageNum++;
-    }
+    imgs.forEach((img) => {
+      observer.observe(img);
+    });
+  }, 300);
 
-    const { currentPage } = stateRef.current;
-    if (newPageNum !== currentPage) {
-      setState({ currentPage: newPageNum, pageText: newPageNum }); // page changed
-    }
-  };
 
   const dragToScroll = (e) => {
     e.preventDefault();
@@ -281,14 +284,13 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
           rotateLoading={rotateLoading}
         />
       </div>
-      <div attached="bottom" className="file-dossier-img-container" ref={contentRef} style={{height: 'calc(100% - 28px)'}}>
+      <div attached="bottom" className="file-dossier-img-container" ref={contentRef} style={{ height: 'calc(100% - 28px)' }}>
         {images.map((image, i) => (
           <div key={image.name}>
             <img
               src={image.src} // key={image.src}
               className={`ui fluid image file-dossier-img-rotate${rotateArr[i]}`}
               onLoad={(event) => imageOnLoadHandler(event, rotateArr[i])}
-              // alt="Не удалось отобразить preview файла"
             />
           </div>
         ))}
