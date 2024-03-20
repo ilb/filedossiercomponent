@@ -85,9 +85,8 @@ background-color: #fff;
 
 
 .file-dossier-mirror-horizontal {
-  transform: scaleX(-1) !important;
-  -webkit-transform: scaleX(-1) !important;
-  -moz-transform: scaleX(-1) !important;
+  left: auto !important;
+  right: 0 !important;
 }
 
 .file-dossier-mirror-horizontal::before {
