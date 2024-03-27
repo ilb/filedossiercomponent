@@ -13,6 +13,7 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
   };
   const [state, _setState] = useState(initialState);
   const [rotateArr, setRotateArr] = useState(new Array(images.length));
+  const [buttonEvent, setButtonEvent] = useState(false);
   const stateRef = useRef(state); // for event listeners to always get actual state
   const setState = (updates, cb) => {
     _setState((currentState) => {
@@ -69,6 +70,10 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
   };
 
   const scrollUpdated = useDebouncedCallback(() => {
+    if (buttonEvent) {
+      setButtonEvent(false);
+      return;
+    };
     const imgContainer = contentRef.current;
     const viewTop = imgContainer.scrollTop;
     const viewBottom = viewTop + window.innerHeight;
@@ -152,6 +157,7 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
   };
 
   const setPage = (event, { value }) => {
+    setButtonEvent(true);
     const pageNum = Number(value);
     if (!pageNum || pageNum > images.length) {
       if (document.activeElement) {
@@ -172,6 +178,7 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
   };
 
   const setScale = (scale) => {
+    setButtonEvent(true);
     const imgContainer = contentRef.current;
     const imgs = imgContainer.querySelectorAll('img');
     const containersItems = imgContainer.querySelectorAll('div');
@@ -232,6 +239,7 @@ export default function ImagesViewer({ file, images, dossierInst, contentRef }) 
   };
 
   const rotateFile = async (event, { angle, page }) => {
+    setButtonEvent(true);
     let newAngle = rotateArr[page - 1] + angle;
     if (newAngle < 0) {
       newAngle = 270;
