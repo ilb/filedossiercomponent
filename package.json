@@ -1,6 +1,6 @@
 {
   "name": "@ilb/filedossiercomponent",
-  "version": "2.1.72",
+  "version": "2.1.73",
   "description": "",
   "main": "src/index.jsx",
   "scripts": {
