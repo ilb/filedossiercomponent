@@ -29,9 +29,10 @@ export default class FileDossier {
   // Temporary solution
   // @TODO: remove hostnames from filedossier API
   replaceBasePath = (url) => {
-    let result = url;
     const parsed = new URL(url);
     debug('parsed url', { parsed });
+    let result = `${this.basePath}/archive?url=${url}`;
+
     const parsedPathName = parsed.pathname.split('dossiers/')[1];
     if (parsedPathName) {
       result = `${this.basePath}/dossiers/${parsedPathName}${parsed.search}`;
