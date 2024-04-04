@@ -29,11 +29,13 @@ export default class FileDossier {
   // Temporary solution
   // @TODO: remove hostnames from filedossier API
   replaceBasePath = (url) => {
+    let result = url;
     const parsed = new URL(url);
     debug('parsed url', { parsed });
-    const result = `${this.basePath}/dossiers/${parsed.pathname.split('dossiers/')[1]}${
-      parsed.search
-    }`;
+    const parsedPathName = parsed.pathname.split('dossiers/')[1];
+    if (parsedPathName) {
+      result = `${this.basePath}/dossiers/${parsedPathName}${parsed.search}`;
+    }
     debug('replaceBasePath', url, result);
     return result;
   };
@@ -343,19 +345,19 @@ export default class FileDossier {
    */
   createAction =
     ({ state = {}, setState, action, callback, description }) =>
-    async (...params) => {
-      setState({ ...state, loading: true, error: null, description });
-      const result = await action(...params);
-      if (result && result.error) {
-        setState({ ...state, loading: false, error: result.error, description });
+      async (...params) => {
+        setState({ ...state, loading: true, error: null, description });
+        const result = await action(...params);
+        if (result && result.error) {
+          setState({ ...state, loading: false, error: result.error, description });
+          return result;
+        }
+
+        if (callback) {
+          await callback();
+        }
+
+        setState({ ...state, loading: false, error: null, value: null, ...result, description });
         return result;
-      }
-
-      if (callback) {
-        await callback();
-      }
-
-      setState({ ...state, loading: false, error: null, value: null, ...result, description });
-      return result;
-    };
+      };
 }
