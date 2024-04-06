@@ -31,11 +31,10 @@ export default class FileDossier {
   replaceBasePath = (url) => {
     const parsed = new URL(url);
     debug('parsed url', { parsed });
-    let result = `${this.basePath}/archive?url=${url}`;
-
-    const parsedPathName = parsed.pathname.split('dossiers/')[1];
-    if (parsedPathName) {
-      result = `${this.basePath}/dossiers/${parsedPathName}${parsed.search}`;
+    let result = `${this.basePath}/archive?url=${encodeURI(url)}`;
+    const pathnameDossier = parsed.pathname.split('dossiers/')[1];
+    if (pathnameDossier) {
+      result = `${this.basePath}/dossiers/${pathnameDossier}${parsed.search}`;
     }
     debug('replaceBasePath', url, result);
     return result;
