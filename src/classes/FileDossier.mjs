@@ -202,6 +202,16 @@ export default class FileDossier {
     return result;
   };
 
+  /* get external file container */
+  getExternalContainer = async (file) => {
+    const url = file.path;
+    if (!url) {
+      return { error: 'Не найден url контейнера' };
+    }
+    const result = await this.makeRequest(this.replaceBasePath(url));
+    return result;
+  };
+
   /* Сохранение угла поворота файла */
   saveFileRotation = async ({ dossierFile, angle }) => {
     if (dossierFile.canSaveRotation) {

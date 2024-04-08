@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'semantic-ui-react';
-import FileContent from '../DossierViewer/FileContent';
+import FileContentExternal from '../DossierViewer/FileContentExternal';
+
 
 export default function ExternalFilesList({ basePath, files }) {
   if (!files || !files.length) {
@@ -23,7 +24,7 @@ export default function ExternalFilesList({ basePath, files }) {
         onClick={() => {
           selectFile(externalFile);
         }}>
-        <FileContent
+        <FileContentExternal
           basePath={basePath}
           file={externalFile}
           mode="thumbnail"
@@ -57,7 +58,7 @@ export default function ExternalFilesList({ basePath, files }) {
           Файлы: {files.findIndex((f) => f.path === selectedFile.path) + 1} / {files.length}
         </div>
       </div>
-      {selectedFile && <FileContent basePath={basePath} file={selectedFile} />}
+      {selectedFile && <FileContentExternal basePath={basePath} file={selectedFile} />}
     </div>
   );
 }
